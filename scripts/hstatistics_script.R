@@ -1,4 +1,5 @@
 ## Calculate H statistics for all rows in the hapcount file using 2 loops.
+# Updated to see how it looks on github
 
 # Open hapcount table into R 
 hapcount_table <- read.table("hapcount_chr1_test.hapcount", 
