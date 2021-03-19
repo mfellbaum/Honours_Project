@@ -1,19 +1,19 @@
 chromStart <- seq(from = 1, 
-                  to = 30000001,
-                  by = 1000000)
+                  to = 29990000,
+                  by = 9000)
 
-chromEnd <- seq(from = 1000000,
-                to = 31000000,
-                by = 1000000)
+chromEnd <- seq(from = 10000,
+                to = 30000000,
+                by = 9000)
 
 chrom <- rep("chrom 1", each = length(chromStart))
 
-bedfile <- data.frame(chr,chromStart,chromEnd)
+bedfile <- data.frame(chrom,chromStart,chromEnd)
 
 cat("track name=\"atsweeps\" description=\"BED file for hapcount\"\n",
-    file = "hapcount_BED_file_test.bed")
+    file = "hapcount_BED_file_1kb.bed")
 
-write.table(bedfile, file = "hapcount_BED_file_test.bed",
+write.table(bedfile, file = "hapcount_BED_file_1kb.bed",
             row.names = F, 
             col.names = F,
             quote = F,
