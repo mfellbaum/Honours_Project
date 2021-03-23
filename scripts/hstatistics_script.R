@@ -69,19 +69,21 @@ for(n in loop.vector.1){
     if(hapcount_table[n , f] == "") {break}
     r <- hapcount_table[n , f]
     d <- as.numeric(unlist(strsplit(r, ":")))
+
+# Calculate H1 for 1 row    
     j <- ((d[2]/90)^2)*(d[1])
     h1.single.row[(f-6)] <- j 
 
-# Define 2 most common haplotypes  
+# Define 2 most common haplotypes for 1 row 
     hapfreq1 <- d[2] 
     if(d[1] > 1) {hapfreq2 <- d[2]} 
   }
   
-# Add calculations to the hstats vector
+# Calculate H1 for all rows
   t <- sum(h1.single.row, na.rm = T)
   h1.all.rows[n] <- t
 
-# Calculate H12    
+# Calculate H12 for all rows   
   h12[n] <- t + 2*(hapfreq1/90)*(hapfreq2/90)
 }
 
