@@ -39,3 +39,6 @@ h1.all.rows
 file.create("h1_1Mb_window")
 write.table(hstats.all.rows, "h1_1Mb_window")
 plot(h1.all.rows)
+
+# H12 stats
+
