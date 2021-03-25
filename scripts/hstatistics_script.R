@@ -9,21 +9,21 @@
 # Open hapcount table into R 
 hapcount_table <- read.table("hapcount_chr1_test.hapcount", 
                              fill = T, skip = 1, col.names = c(1:9))
-
-# Define loop vectors
-loop.vector.1 <- 1:31
-loop.vector.2 <- c(7,8,9)
-
-# Create hstats vector
+# Create hstats vectors
 h1 <- rep(NA, 31)
 h12 <- rep(NA, 31)
 h2 <- rep(NA, 31)
 h21 <- rep(NA, 31)
 
+# Define loop vectors
+loop.vector.1 <- 1:31
+loop.vector.2 <- c(7,8,9)
+
+
 # Open outer loop for all rows
 for(n in loop.vector.1){
   
-# Define hstats vector for single row to reset in each loop    
+# Define h1 vector for single row to reset in each loop    
   h1.single.row <- rep(NA, 3)
   
 # Open inner loop for 1 row  
