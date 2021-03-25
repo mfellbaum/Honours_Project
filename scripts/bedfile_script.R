@@ -1,10 +1,10 @@
 chromStart <- seq(from = 1, 
                   to = 29991000,
-                  by = 1000)
+                  by = 10000)
 
 chromEnd <- seq(from = 10000,
                 to = 30000000,
-                by = 1000)
+                by = 10000)
 
 chrom <- rep("1", each = length(chromStart))
 
