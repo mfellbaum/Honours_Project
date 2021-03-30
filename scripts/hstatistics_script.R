@@ -29,8 +29,8 @@ for(n in loop.vector.1){
   h1.single.row <- rep(NA, length(loop.vector.2))
   
   # Define hapfreq and multiplicity vectors to reset each loop
-  hapfreq <- rep(NA, (columns-6))
-  multiplicity <- rep(NA, (columns-6))
+  hapfreq <- rep(NA, length(loop.vector.2))
+  multiplicity <- rep(NA, length(loop.vector.2))
   
   # Open inner loop for 1 row  
   for(f in loop.vector.2){
