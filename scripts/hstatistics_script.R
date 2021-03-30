@@ -25,22 +25,25 @@ loop.vector.2 <- 7:columns
 # Open outer loop for all rows
 for(n in loop.vector.1){
   
-# Define h1 vector for single row to reset in each loop    
+  # Define h1 vector for single row to reset in each loop    
   h1.single.row <- rep(NA, length(loop.vector.2))
   
-# Open inner loop for 1 row  
+  # Open inner loop for 1 row  
   for(f in loop.vector.2){
     
-# Extract haplotype frequency and multiplicity from hapcount table    
+    # Extract haplotype frequency and multiplicity from hapcount table    
     if(hapcount_table[n , f] == "") {break}
     r <- hapcount_table[n , f]
     d <- as.numeric(unlist(strsplit(r, ":")))
     
-# Calculate H1 for 1 row    
+    # Calculate H1 for 1 row    
     j <- ((d[2]/90)^2)*(d[1])
     h1.single.row[(f-6)] <- j 
     
-# Define 2 most common haplotypes for 1 row 
+    # Define 2 most common haplotypes for 1 row 
+    hapfreq1 <- 0
+    hapfreq2 <- 0
+    
     hapfreq1 <- d[2] 
     if(d[1] > 1) {hapfreq2 <- d[2]} 
   }
@@ -62,6 +65,9 @@ h1
 h12
 h21
 hapcount_table
+
+
+
 
 file.create("h1_10kb_window")
 write.table(h1, "h1_10kb_window")
