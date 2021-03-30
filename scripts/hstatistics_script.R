@@ -28,6 +28,10 @@ for(n in loop.vector.1){
   # Define h1 vector for single row to reset in each loop    
   h1.single.row <- rep(NA, length(loop.vector.2))
   
+  # Define hapfreq and multiplicity vectors to reset each loop
+  hapfreq <- rep(NA, (columns-6))
+  multiplicity <- rep(NA, (columns-6))
+  
   # Open inner loop for 1 row  
   for(f in loop.vector.2){
     
@@ -40,12 +44,25 @@ for(n in loop.vector.1){
     j <- ((d[2]/90)^2)*(d[1])
     h1.single.row[(f-6)] <- j 
     
+    
+    # Sort hapfreq and multiplicity 
+    hapfreq[f-6] <- d[2]
+    hapfreq <- sort(hapfreq, decreasing = T)
+    
+    # This doesn't work yet - something going wrong with the reverse over loops
+    multiplicity[f-6] <- d[1]
+    multiplicity <- rev(multiplicity)
+    multiplicity <- na.omit(multiplicity)
+    
+    
     # Define 2 most common haplotypes for 1 row 
     hapfreq1 <- 0
     hapfreq2 <- 0
     
-    hapfreq1 <- d[2] 
-    if(d[1] > 1) {hapfreq2 <- d[2]} 
+    hapfreq1 <- hapfreq[1]
+    if(multiplicity[1] == 1) {hapfreq2 <- hapfreq[2]}
+    else {hapfreq2 <- hapfreq[1]}
+     
   }
   
   # Calculate H1 for all rows
@@ -60,11 +77,6 @@ for(n in loop.vector.1){
   # Calculate H2/H1 for all rows  
   h21[n] <- h2[n]/h1[n]
 }
-
-h1
-h12
-h21
-hapcount_table
 
 
 
@@ -81,3 +93,10 @@ write.table(h21, "h21_10kb_window")
 plot(h1, pch = 20, xlab = "Window", main = "H1 statistics for 10kb fixed windows")
 plot(h12, pch = 20, xlab = "Window", main = "H12 statistics for 10kb fixed windows")
 plot(h21, pch = 20, xlab = "Window", main = "H2/H1 statistics for 10kb fixed windows")
+
+
+
+# Sketchy way to define the hapfreq - think it would work but not the proper way to do it
+#hapfreq2 <- 0
+#hapfreq2 <- hapfreq1
+#hapfreq1 <- d[2]
