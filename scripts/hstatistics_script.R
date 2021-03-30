@@ -46,14 +46,13 @@ for(n in loop.vector.1){
   }
   
   # Calculate H1 for all rows
-  t <- sum(h1.single.row, na.rm = T)
-  h1[n] <- t
+  h1[n] <- sum(h1.single.row, na.rm = T)
   
   # Calculate H12 for all rows   
-  h12[n] <- t + 2*(hapfreq1/90)*(hapfreq2/90)
+  h12[n] <- h1[n] + 2*(hapfreq1/90)*(hapfreq2/90)
   
   # Calculate H2 for all rows  
-  h2[n] <- t-((hapfreq1/90)^2)
+  h2[n] <- h1[n]-((hapfreq1/90)^2)
   
   # Calculate H2/H1 for all rows  
   h21[n] <- h2[n]/h1[n]
@@ -62,6 +61,7 @@ for(n in loop.vector.1){
 h1
 h12
 h21
+hapcount_table
 
 file.create("h1_10kb_window")
 write.table(h1, "h1_10kb_window")
