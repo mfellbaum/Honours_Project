@@ -1,5 +1,5 @@
 chromStart <- seq(from = 1, 
-                  to = 29991000,
+                  to = 29980001,
                   by = 20000)
 
 chromEnd <- seq(from = 20000,
