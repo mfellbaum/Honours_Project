@@ -8,8 +8,12 @@
 # Open hapcount table into R 
 hapcount_table <- read.table("hapcount_chr1_20kb.hapcount", 
                              fill = T, skip = 1, col.names = c(1:13))
+hapcount_table <- hapcount_table[hapcount_table[,4] >= 100,]
+
+
 rows <- nrow(hapcount_table)
 columns <- ncol(hapcount_table)
+row.names(hapcount_table) <- 1:rows
 
 # Create hstats vectors
 h1 <- rep(NA, rows)
@@ -63,6 +67,7 @@ for(n in loop.vector.1){
   hapfreq1 <- hapfreq[1]
   if(multiplicity[1] == 1) {hapfreq2 <- hapfreq[2]}
   else {hapfreq2 <- hapfreq[1]}
+  if(is.na(hapfreq2)) {hapfreq2 <- 0}
   
   # Calculate H1, H12, H2 and H2/H1 for all rows
   h1[n] <- sum(h1.single.row, na.rm = T)
@@ -83,9 +88,13 @@ write.table(h12, "h12_20kb_window")
 file.create("h21_20kb_window")
 write.table(h21, "h21_20kb_window")
 
-plot(h1, pch = 20, xlab = "Window", main = "H1 statistics for 20kb fixed windows")
-plot(h12, pch = 20, xlab = "Window", main = "H12 statistics for 20kb fixed windows")
-plot(h21, pch = 20, xlab = "Window", main = "H2/H1 statistics for 20kb fixed windows")
 
+midpoint <- (hapcount_table[[3]]-10000)/1000
 
+plot(x = midpoint, y = h1, pch = 20, xlab = "Window midpoint (kb)", main = "H1 for 20kb fixed windows", ylab = "H1")
+plot(x = midpoint, y = h12, pch = 20, xlab = "Window midpoint (kb)", main = "H12 for 20kb fixed windows", ylab = "H12")
+plot(x = midpoint, y = h21, pch = 20, xlab = "Window midpoint (kb)", main = "H2/H1 for 20kb fixed windows", ylab = "H2/H1")
 
+i <- hapcount_table[3]-10000
+nrow(i)
+length(h1)
