@@ -89,12 +89,10 @@ file.create("h21_20kb_window")
 write.table(h21, "h21_20kb_window")
 
 
-midpoint <- (hapcount_table[[3]]-10000)/1000
+midpoint <- (hapcount_table[[3]]-10000)/1000000
 
-plot(x = midpoint, y = h1, pch = 20, xlab = "Window midpoint (kb)", main = "H1 for 20kb fixed windows", ylab = "H1")
-plot(x = midpoint, y = h12, pch = 20, xlab = "Window midpoint (kb)", main = "H12 for 20kb fixed windows", ylab = "H12")
-plot(x = midpoint, y = h21, pch = 20, xlab = "Window midpoint (kb)", main = "H2/H1 for 20kb fixed windows", ylab = "H2/H1")
+plot(x = midpoint, y = h1, pch = 20, xlab = "Window midpoint (Mb)", main = "H1 for 20kb fixed windows", ylab = "H1")
+plot(x = midpoint, y = h12, pch = 20, xlab = "Window midpoint (Mb)", main = "H12 for 20kb fixed windows", ylab = "H12")
+plot(x = midpoint, y = h21, pch = 20, xlab = "Window midpoint (Mb)", main = "H2/H1 for 20kb fixed windows", ylab = "H2/H1")
 
-i <- hapcount_table[3]-10000
-nrow(i)
-length(h1)
+
