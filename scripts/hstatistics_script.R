@@ -1,16 +1,21 @@
 ## Calculate H statistics for all rows in the hapcount file using 2 loops.
 
-# Need to update the hapcount file name for different window sizes.
-
-
-# All H stats in 1 script
-
 # Open hapcount table into R 
 hapcount_table <- read.table("hapcount_chr1_20kb.hapcount", 
                              fill = T, skip = 1, col.names = c(1:13))
+
+# Open rec table and add rec column to hapcount table
+rec_table <- read.table("Rec_AT_Chr1.dat")
+rec_vector <- rec_table[["cM.Mb"]]
+hapcount_table$x14 <- rec_vector
+hapcount_table <- na.omit(hapcount_table)
+
+
+# Filter out rows with SNPs < 100 and cM/Mb < 0.5
 hapcount_table <- hapcount_table[hapcount_table[,4] >= 100,]
+hapcount_table <- hapcount_table[hapcount_table[,14] >= 0.5,]
 
-
+# Define rows and columns
 rows <- nrow(hapcount_table)
 columns <- ncol(hapcount_table)
 row.names(hapcount_table) <- 1:rows
@@ -23,7 +28,7 @@ h21 <- rep(NA, rows)
 
 # Define loop vectors
 loop.vector.1 <- 1:rows
-loop.vector.2 <- 7:columns
+loop.vector.2 <- 7:(columns-1)
 
 
 # Open outer loop for all rows
