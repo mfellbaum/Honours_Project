@@ -1,5 +1,8 @@
 ## Calculate H statistics for all rows in the hapcount file using 2 loops.
 
+# Set working directory
+setwd("~/Documents/Uni/4th_year/Honours_Project/Coding")
+
 # Open hapcount table into R 
 hapcount_table <- read.table("hapcount_chr1_20kb.hapcount", 
                              fill = T, skip = 1, col.names = c(1:13))
@@ -14,6 +17,7 @@ hapcount_table <- na.omit(hapcount_table)
 # Filter out rows with SNPs < 100 and cM/Mb < 0.5
 hapcount_table <- hapcount_table[hapcount_table[,4] >= 100,]
 hapcount_table <- hapcount_table[hapcount_table[,14] >= 0.5,]
+
 
 # Define rows and columns
 rows <- nrow(hapcount_table)
@@ -100,4 +104,7 @@ plot(x = midpoint, y = h1, pch = 20, xlab = "Window midpoint (Mb)", main = "H1 f
 plot(x = midpoint, y = h12, pch = 20, xlab = "Window midpoint (Mb)", main = "H12 for 20kb fixed windows", ylab = "H12")
 plot(x = midpoint, y = h21, pch = 20, xlab = "Window midpoint (Mb)", main = "H2/H1 for 20kb fixed windows", ylab = "H2/H1")
 
+plot(x = hapcount_table$x14, y = h1, pch = 20, xlab = "Recombination rate (cM/Mb)", main = "H1 as a function of recombination rate", ylab = "H1")
+plot(x = hapcount_table$x14, y = h12, pch = 20, xlab = "Recombination rate (cM/Mb)", main = "H12 as a function of recombination rate", ylab = "H12")
+plot(x = hapcount_table$x14, y = h21, pch = 20, xlab = "Recombination rate (cM/Mb)", main = "H2/H1 as a function of recombination rate", ylab = "H2/H1")
 
