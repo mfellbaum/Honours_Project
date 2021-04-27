@@ -18,11 +18,16 @@ hapcount_table <- na.omit(hapcount_table)
 hapcount_table <- hapcount_table[hapcount_table[,4] >= 100,]
 hapcount_table <- hapcount_table[hapcount_table[,14] >= 0.5,]
 
+# Remove the centromere
+hapcount_table_1 <- hapcount_table[hapcount_table[,3] <= 13700000,]
+hapcount_table_2 <- hapcount_table[hapcount_table[,2] >= 15900000,]
+hapcount_table <- rbind(x = hapcount_table_1, y = hapcount_table_2)
 
 # Define rows and columns
 rows <- nrow(hapcount_table)
 columns <- ncol(hapcount_table)
 row.names(hapcount_table) <- 1:rows
+midpoint <- (hapcount_table[[3]]-10000)/1000000
 
 # Create hstats vectors
 h1 <- rep(NA, rows)
@@ -86,6 +91,14 @@ for(n in loop.vector.1){
 }
 
 
+plot(x = midpoint, y = h1, pch = 20, xlab = "Window midpoint (Mb)", main = "H1 with 13.7-15.9 Mb centromere", ylab = "H1")
+plot(x = midpoint, y = h12, pch = 20, xlab = "Window midpoint (Mb)", main = "H12 with 13.7-15.9 Mb centromere", ylab = "H12")
+plot(x = midpoint, y = h21, pch = 20, xlab = "Window midpoint (Mb)", main = "H2/H1 with 13.7-15.9 Mb centromere", ylab = "H2/H1")
+
+plot(x = hapcount_table$x14, y = h1, pch = 20, xlab = "Recombination rate (cM/Mb)", main = "H1 as a function of recombination rate", ylab = "H1")
+plot(x = hapcount_table$x14, y = h12, pch = 20, xlab = "Recombination rate (cM/Mb)", main = "H12 as a function of recombination rate", ylab = "H12")
+plot(x = hapcount_table$x14, y = h21, pch = 20, xlab = "Recombination rate (cM/Mb)", main = "H2/H1 as a function of recombination rate", ylab = "H2/H1")
+
 
 
 file.create("h1_20kb_window")
@@ -96,15 +109,4 @@ write.table(h12, "h12_20kb_window")
 
 file.create("h21_20kb_window")
 write.table(h21, "h21_20kb_window")
-
-
-midpoint <- (hapcount_table[[3]]-10000)/1000000
-
-plot(x = midpoint, y = h1, pch = 20, xlab = "Window midpoint (Mb)", main = "H1 for 20kb fixed windows", ylab = "H1")
-plot(x = midpoint, y = h12, pch = 20, xlab = "Window midpoint (Mb)", main = "H12 for 20kb fixed windows", ylab = "H12")
-plot(x = midpoint, y = h21, pch = 20, xlab = "Window midpoint (Mb)", main = "H2/H1 for 20kb fixed windows", ylab = "H2/H1")
-
-plot(x = hapcount_table$x14, y = h1, pch = 20, xlab = "Recombination rate (cM/Mb)", main = "H1 as a function of recombination rate", ylab = "H1")
-plot(x = hapcount_table$x14, y = h12, pch = 20, xlab = "Recombination rate (cM/Mb)", main = "H12 as a function of recombination rate", ylab = "H12")
-plot(x = hapcount_table$x14, y = h21, pch = 20, xlab = "Recombination rate (cM/Mb)", main = "H2/H1 as a function of recombination rate", ylab = "H2/H1")
 
