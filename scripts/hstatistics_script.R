@@ -90,10 +90,29 @@ for(n in loop.vector.1){
   h21[n] <- h2[n]/h1[n]
 }
 
+# Bonferroni correction <- 5%/nrows
 
-plot(x = midpoint, y = h1, pch = 20, xlab = "Window midpoint (Mb)", main = "H1 with 13.7-15.9 Mb centromere", ylab = "H1")
-plot(x = midpoint, y = h12, pch = 20, xlab = "Window midpoint (Mb)", main = "H12 with 13.7-15.9 Mb centromere", ylab = "H12")
-plot(x = midpoint, y = h21, pch = 20, xlab = "Window midpoint (Mb)", main = "H2/H1 with 13.7-15.9 Mb centromere", ylab = "H2/H1")
+bonferroni <- 5/1308
+
+# Calculate quantile of 95% for H values
+
+h1_quantile <- quantile(h1, probs = 1 - bonferroni)
+h12_quantile <- quantile(h12, probs = 1 - bonferroni)
+h21_quantile <- quantile(h21, probs = 1 - bonferroni)
+
+
+plot(x = midpoint, y = h1, pch = 20, xlab = "Window midpoint (Mb)", main = "H1 with Bonferroni significance line", ylab = "H1")
+abline(h = h1_quantile, lty = 3)
+
+plot(x = midpoint, y = h12, pch = 20, xlab = "Window midpoint (Mb)", main = "H12 with Bonferroni significance line", ylab = "H12")
+abline(h = h12_quantile, lty = 3)
+
+plot(x = midpoint, y = h21, pch = 20, xlab = "Window midpoint (Mb)", main = "H2/H1 with Bonferroni significance line", ylab = "H2/H1")
+abline(h = h21_quantile, lty = 3)
+
+
+
+
 
 plot(x = hapcount_table$x14, y = h1, pch = 20, xlab = "Recombination rate (cM/Mb)", main = "H1 as a function of recombination rate", ylab = "H1")
 plot(x = hapcount_table$x14, y = h12, pch = 20, xlab = "Recombination rate (cM/Mb)", main = "H12 as a function of recombination rate", ylab = "H12")
@@ -101,12 +120,7 @@ plot(x = hapcount_table$x14, y = h21, pch = 20, xlab = "Recombination rate (cM/M
 
 
 
-file.create("h1_20kb_window")
-write.table(h1, "h1_20kb_window")
-
-file.create("h12_20kb_window")
-write.table(h12, "h12_20kb_window")
-
-file.create("h21_20kb_window")
-write.table(h21, "h21_20kb_window")
-
+x <- (h1 - mean(h1))/sd(h1)
+plot(density(x))
+qqnorm(x)
+qqline(x)
