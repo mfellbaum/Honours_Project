@@ -101,6 +101,16 @@ h12_quantile <- quantile(h12, probs = 1 - bonferroni)
 h21_quantile <- quantile(h21, probs = 1 - bonferroni)
 
 
+# Identify regions with significant H values.
+
+h1_table <- cbind(hapcount_table, h1, h21)
+h1_table <- h1_table[h1_table[, 15] >= h1_quantile,]
+
+h12_table <- cbind(hapcount_table, h12, h21)
+h12_table <- h12_table[h12_table[, 15] >= h12_quantile,]
+
+# Plotting
+
 plot(x = midpoint, y = h1, pch = 20, xlab = "Window midpoint (Mb)", main = "H1 with Bonferroni significance line", ylab = "H1")
 abline(h = h1_quantile, lty = 3)
 
@@ -109,7 +119,6 @@ abline(h = h12_quantile, lty = 3)
 
 plot(x = midpoint, y = h21, pch = 20, xlab = "Window midpoint (Mb)", main = "H2/H1 with Bonferroni significance line", ylab = "H2/H1")
 abline(h = h21_quantile, lty = 3)
-
 
 
 
@@ -124,3 +133,4 @@ x <- (h1 - mean(h1))/sd(h1)
 plot(density(x))
 qqnorm(x)
 qqline(x)
+
