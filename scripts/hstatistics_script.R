@@ -1,19 +1,33 @@
 ## Calculate H statistics for all rows in the hapcount file using 2 loops.
 
-# Need to update the hapcount file name for different window sizes.
-
-
-# All H stats in 1 script
+# Set working directory
+setwd("~/Documents/Uni/4th_year/Honours_Project/Coding")
 
 # Open hapcount table into R 
 hapcount_table <- read.table("hapcount_chr1_20kb.hapcount", 
                              fill = T, skip = 1, col.names = c(1:13))
+
+# Open rec table and add rec column to hapcount table
+rec_table <- read.table("Rec_AT_Chr1.dat")
+rec_vector <- rec_table[["cM.Mb"]]
+hapcount_table$x14 <- rec_vector
+hapcount_table <- na.omit(hapcount_table)
+
+
+# Filter out rows with SNPs < 100 and cM/Mb < 0.5
 hapcount_table <- hapcount_table[hapcount_table[,4] >= 100,]
+hapcount_table <- hapcount_table[hapcount_table[,14] >= 0.5,]
 
+# Remove the centromere
+hapcount_table_1 <- hapcount_table[hapcount_table[,3] <= 13700000,]
+hapcount_table_2 <- hapcount_table[hapcount_table[,2] >= 15900000,]
+hapcount_table <- rbind(x = hapcount_table_1, y = hapcount_table_2)
 
+# Define rows and columns
 rows <- nrow(hapcount_table)
 columns <- ncol(hapcount_table)
 row.names(hapcount_table) <- 1:rows
+midpoint <- (hapcount_table[[3]]-10000)/1000000
 
 # Create hstats vectors
 h1 <- rep(NA, rows)
@@ -23,7 +37,7 @@ h21 <- rep(NA, rows)
 
 # Define loop vectors
 loop.vector.1 <- 1:rows
-loop.vector.2 <- 7:columns
+loop.vector.2 <- 7:(columns-1)
 
 
 # Open outer loop for all rows
@@ -76,23 +90,47 @@ for(n in loop.vector.1){
   h21[n] <- h2[n]/h1[n]
 }
 
+# Bonferroni correction <- 5%/nrows
+
+bonferroni <- 5/1308
+
+# Calculate quantile of 95% for H values
+
+h1_quantile <- quantile(h1, probs = 1 - bonferroni)
+h12_quantile <- quantile(h12, probs = 1 - bonferroni)
+h21_quantile <- quantile(h21, probs = 1 - bonferroni)
+
+
+# Identify regions with significant H values.
+
+h1_table <- cbind(hapcount_table, h1, h21)
+h1_table <- h1_table[h1_table[, 15] >= h1_quantile,]
+
+h12_table <- cbind(hapcount_table, h12, h21)
+h12_table <- h12_table[h12_table[, 15] >= h12_quantile,]
+
+# Plotting
+
+plot(x = midpoint, y = h1, pch = 20, xlab = "Window midpoint (Mb)", main = "H1 with Bonferroni significance line", ylab = "H1")
+abline(h = h1_quantile, lty = 3)
+
+plot(x = midpoint, y = h12, pch = 20, xlab = "Window midpoint (Mb)", main = "H12 with Bonferroni significance line", ylab = "H12")
+abline(h = h12_quantile, lty = 3)
+
+plot(x = midpoint, y = h21, pch = 20, xlab = "Window midpoint (Mb)", main = "H2/H1 with Bonferroni significance line", ylab = "H2/H1")
+abline(h = h21_quantile, lty = 3)
 
 
 
-file.create("h1_20kb_window")
-write.table(h1, "h1_20kb_window")
 
-file.create("h12_20kb_window")
-write.table(h12, "h12_20kb_window")
-
-file.create("h21_20kb_window")
-write.table(h21, "h21_20kb_window")
+plot(x = hapcount_table$x14, y = h1, pch = 20, xlab = "Recombination rate (cM/Mb)", main = "H1 as a function of recombination rate", ylab = "H1")
+plot(x = hapcount_table$x14, y = h12, pch = 20, xlab = "Recombination rate (cM/Mb)", main = "H12 as a function of recombination rate", ylab = "H12")
+plot(x = hapcount_table$x14, y = h21, pch = 20, xlab = "Recombination rate (cM/Mb)", main = "H2/H1 as a function of recombination rate", ylab = "H2/H1")
 
 
-midpoint <- (hapcount_table[[3]]-10000)/1000000
 
-plot(x = midpoint, y = h1, pch = 20, xlab = "Window midpoint (Mb)", main = "H1 for 20kb fixed windows", ylab = "H1")
-plot(x = midpoint, y = h12, pch = 20, xlab = "Window midpoint (Mb)", main = "H12 for 20kb fixed windows", ylab = "H12")
-plot(x = midpoint, y = h21, pch = 20, xlab = "Window midpoint (Mb)", main = "H2/H1 for 20kb fixed windows", ylab = "H2/H1")
-
+x <- (h1 - mean(h1))/sd(h1)
+plot(density(x))
+qqnorm(x)
+qqline(x)
 
