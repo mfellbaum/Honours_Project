@@ -111,7 +111,7 @@ h12_table <- h12_table[h12_table[, 15] >= h12_quantile,]
 
 # Plotting
 
-plot(x = midpoint, y = h1, pch = 20, xlab = "Window midpoint (Mb)", main = "H1 with Bonferroni significance line", ylab = "H1")
+plot(x = midpoint, y = h1, pch = 20, xlab = "Window midpoint (Mb)", ylab = "H1")
 abline(h = h1_quantile, lty = 3)
 
 plot(x = midpoint, y = h12, pch = 20, xlab = "Window midpoint (Mb)", main = "H12 with Bonferroni significance line", ylab = "H12")
@@ -130,7 +130,7 @@ plot(x = hapcount_table$x14, y = h21, pch = 20, xlab = "Recombination rate (cM/M
 
 
 x <- (h1 - mean(h1))/sd(h1)
-plot(density(x))
-qqnorm(x)
+plot(density(x), ylab = "H1", xlab = "Density", main = "Normalised null distribution of H1")
+qqnorm(x, main = "H1 qq plot")
 qqline(x)
 
